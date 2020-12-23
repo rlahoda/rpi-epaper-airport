@@ -199,7 +199,7 @@ while True:
 
 
   # initiate screen info
-  textNImg = PapirusComposite(False, rotation = 0)
+  textNImg = PapirusComposite(False, rotation = 180)
 
   # Add base background image
   textNImg.AddImg("./display-background2.png",0,0,(200,96), Id="background")
