@@ -20,7 +20,7 @@ firstCol = 2
 secondCol = 75
 thirdCol = 150
 leftCol = 2
-midCol = 130
+midCol = 125
 rightCol = 150
 
 titleText = 18
