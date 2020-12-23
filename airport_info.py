@@ -20,7 +20,7 @@ firstCol = 2
 secondCol = 75
 thirdCol = 150
 leftCol = 2
-midCol = 110
+midCol = 130
 rightCol = 150
 
 titleText = 18
@@ -79,7 +79,7 @@ status_codes = {
   "NI":  "",
   "OT":  "On Time",
   "DL":  "Delayed",
-  "NO":  "No status",
+  "NO":  "",
 }
 
 
