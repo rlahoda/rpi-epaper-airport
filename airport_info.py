@@ -21,7 +21,7 @@ secondCol = 75
 thirdCol = 150
 leftCol = 2
 midCol = 110
-rightCol = 120
+rightCol = 150
 
 titleText = 18
 mainText = 16
