@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 from papirus import PapirusComposite
 import requests
 from random import randrange
