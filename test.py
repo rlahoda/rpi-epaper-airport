@@ -48,11 +48,11 @@ textNImg.AddText("ABCDEFG", midCol, thirdLine,mainText, Id="status")
 # Fourth Line
 textNImg.AddText("ABCDEFG", firstCol, fourthLine,mainText, Id="depart")
 textNImg.AddText("ABCDEFG", secondCol, fourthLine,mainText, Id="length")
-textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", thirdCol, fourthLine,mainText, Id="time")
+textNImg.AddText("ABCDE", thirdCol, fourthLine,mainText, Id="time")
 # Fifth Line
 textNImg.AddText("ABCDEFG", firstCol, fifthLine,mainText, Id="deptTime")
-textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", secondCol, fifthLine,mainText, Id="flightLen")
-textNImg.AddText("ABCDEFG", thirdCol, fifthLine,mainText, Id="localTime")
+textNImg.AddText("ABCDEFG", secondCol, fifthLine,mainText, Id="flightLen")
+textNImg.AddText("ABCDE", thirdCol, fifthLine,mainText, Id="localTime")
 
 # Add image
 # Nothing will show on the screen
