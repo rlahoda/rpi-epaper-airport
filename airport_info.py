@@ -203,7 +203,7 @@ while True:
   textNImg = PapirusComposite(False, rotation = 180)
 
   # Add base background image
-  textNImg.AddImg("./display-background2.png",0,0,(200,96), Id="background")
+  textNImg.AddImg("/home/pi/rpi-epaper-airport/display-background2.png",0,0,(200,96), Id="background")
 
   # formatting for display
   airline_name = airline[:10] if len(airline) > 10 else airline
