@@ -21,7 +21,7 @@ firstCol = 2
 secondCol = 75
 thirdCol = 150
 leftCol = 2
-midCol = 125
+midCol = 127
 rightCol = 155
 
 titleText = 18
@@ -44,15 +44,15 @@ textNImg.AddText("ABCDEFGHIJKLMNOPQRST", firstCol, firstLine,mainText, Id="depar
 textNImg.AddText("ABCDEFGHIJKLMNOPQRST", firstCol, secondLine, mainText, Id="arriveAirport")
 # Third Line
 textNImg.AddText("ABCDEFGHIJKL", firstCol, thirdLine,mainText, Id="terminal")
-textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", midCol, thirdLine,mainText, Id="status")
+textNImg.AddText("ABCDEFG", midCol, thirdLine,mainText, Id="status")
 # Fourth Line
 textNImg.AddText("ABCDEFG", firstCol, fourthLine,mainText, Id="depart")
-textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", secondCol, fourthLine,mainText, Id="length")
+textNImg.AddText("ABCDEFG", secondCol, fourthLine,mainText, Id="length")
 textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", thirdCol, fourthLine,mainText, Id="time")
 # Fifth Line
 textNImg.AddText("ABCDEFG", firstCol, fifthLine,mainText, Id="deptTime")
 textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", secondCol, fifthLine,mainText, Id="flightLen")
-textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", thirdCol, fifthLine,mainText, Id="localTime")
+textNImg.AddText("ABCDEFG", thirdCol, fifthLine,mainText, Id="localTime")
 
 # Add image
 # Nothing will show on the screen
