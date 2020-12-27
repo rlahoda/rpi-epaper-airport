@@ -35,24 +35,24 @@ textNImg = PapirusComposite(False, rotation = 0)
 textNImg.AddImg("./display-background2.png",0,0,(200,96), Id="background")
 
 
- # Title Line
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", leftCol, titleLine,titleText, Id="Carrier" , invert=True)
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", rightCol, titleLine,titleText, Id="Flight" , invert=True)
-  # First Line
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, firstLine,mainText, Id="departAirport")
-  # Second Line
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, secondLine, mainText, Id="arriveAirport")
-  # Third Line
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, thirdLine,mainText, Id="terminal")
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", midCol, thirdLine,mainText, Id="status")
-  # Fourth Line
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, fourthLine,mainText, Id="depart")
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", secondCol, fourthLine,mainText, Id="length")
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", thirdCol, fourthLine,mainText, Id="time")
-  # Fifth Line
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, fifthLine,mainText, Id="deptTime")
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", secondCol, fifthLine,mainText, Id="flightLen")
-  textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", thirdCol, fifthLine,mainText, Id="localTime")
+# Title Line
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", leftCol, titleLine,titleText, Id="Carrier" , invert=True)
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", rightCol, titleLine,titleText, Id="Flight" , invert=True)
+# First Line
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, firstLine,mainText, Id="departAirport")
+# Second Line
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, secondLine, mainText, Id="arriveAirport")
+# Third Line
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, thirdLine,mainText, Id="terminal")
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", midCol, thirdLine,mainText, Id="status")
+# Fourth Line
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, fourthLine,mainText, Id="depart")
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", secondCol, fourthLine,mainText, Id="length")
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", thirdCol, fourthLine,mainText, Id="time")
+# Fifth Line
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", firstCol, fifthLine,mainText, Id="deptTime")
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", secondCol, fifthLine,mainText, Id="flightLen")
+textNImg.AddText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", thirdCol, fifthLine,mainText, Id="localTime")
 
 # Add image
 # Nothing will show on the screen
