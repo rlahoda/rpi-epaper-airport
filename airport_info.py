@@ -21,7 +21,7 @@ firstCol = 2
 secondCol = 75
 thirdCol = 150
 leftCol = 2
-midCol = 125
+midCol = 129
 rightCol = 155
 
 titleText = 18
@@ -206,7 +206,7 @@ while True:
   textNImg.AddImg("/home/pi/rpi-epaper-airport/display-background2.png",0,0,(200,96), Id="background")
 
   # formatting for display
-  airline_name = airline[:10] if len(airline) > 10 else airline
+  airline_name = airline[:14] if len(airline) > 14 else airline
 
   depart_airport_name_formatted = depart_airport_name[:17] if len(depart_airport_name) > 17 else depart_airport_name
   dest_airport_name_formatted = dest_airport_name[:17] if len(dest_airport_name) > 17 else dest_airport_name
