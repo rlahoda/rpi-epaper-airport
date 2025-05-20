@@ -78,26 +78,27 @@ token_expire_time = ""
 headers = {}
 last_airport_code = ""
 
-
+text = PapirusText()
+text.write("Initializing", Id="Start")
 def getToken():
     """
   Fetches an auth token from the api
   """
     global token
     global headers
+    global text
     try:
       token_request = requests.post(token_url, data=token_auth)
       if token_request.status_code == requests.codes.ok:
           token = token_request.json()["access_token"]
           headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
-          text = PapirusText()
-          text.write("Token aquired", Id="Start")
+          text.UpdateText("Start", "Token aquired")
           sleep(1)
           text.RemoveText("Start")
     except:
       # show error, wait, return
-      text = PapirusText()
-      text.write("Token error. Retrying in 5", Id="Start")
+      
+      text.UpdateText("Start", "Token error. Retrying in 5")
       sleep(1)
       text.UpdateText("Start", "Token error. Retrying in 4")
       sleep(1)
