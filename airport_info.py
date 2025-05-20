@@ -88,21 +88,26 @@ def getToken():
     try:
       token_request = requests.post(token_url, data=token_auth)
       if token_request.status_code == requests.codes.ok:
-        token = token_request.json()["access_token"]
-        headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
+          token = token_request.json()["access_token"]
+          headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
+          text = PapirusText()
+          text.write("Token aquired", Id="Start")
+          sleep(1)
+          text.RemoveText("Start")
     except:
-      # show error, wait 10sec, return
+      # show error, wait, return
       text = PapirusText()
-      text.write("Token error. Retrying in 5")
+      text.write("Token error. Retrying in 5", Id="Start")
       sleep(1)
-      text.write("Token error. Retrying in 4")
+      text.UpdateText("Start", "Token error. Retrying in 4")
       sleep(1)
-      text.write("Token error. Retrying in 3")
+      text.UpdateText("Start", "Token error. Retrying in 3")
       sleep(1)
-      text.write("Token error. Retrying in 2")
+      text.UpdateText("Start", "Token error. Retrying in 2")
       sleep(1)
-      text.write("Token error. Retrying in 1")
-      text.Clear()
+      text.UpdateText("Start", "Token error. Retrying in 1")
+      sleep(1)
+      text.RemoveText("Start")
       return
 
 
@@ -289,4 +294,5 @@ def displayFlightInfo():
 
 while True:
     displayFlightInfo()
+    sleep(1)
 
