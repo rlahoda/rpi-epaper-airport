@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-from papirus import PapirusComposite
+from papirus import PapirusComposite, PapirusText
 import requests
 from random import randrange
 import datetime as dt
@@ -8,6 +8,7 @@ from gpiozero import Button
 from time import sleep
 import pytz
 import login_info
+import codes
 
 # Main layout variables
 titleLine = 2
@@ -41,60 +42,41 @@ if login_info.token_auth:
     token_auth = login_info.token_auth
 
 token = ""
-params = {"serviceType": "passenger", "limit": "5"}
-
+params = {"serviceType": "passenger", "limit": "10"}
 code_params = {"lang": "en"}
-
 api_attempts = 0
 
 # API URLs
 code_url = ""
 flights_url = "https://api.lufthansa.com/v1/operations/flightstatus/departures/"
-carrier_codes_url = "https://api.lufthansa.com/v1/mds-references/airlines/"
+# carrier_codes_url = "https://api.lufthansa.com/v1/mds-references/airlines/"
 airport_codes_url = "https://api.lufthansa.com/v1/mds-references/airports/"
 
 
 # Determines which airports the flights will be chosen from
+    # "FRA", # Frankfurt - gives an error when testing out the API for some reason
 codesArr = [
-    "FRA",
-    "CDG",
-    "EWR",
-    "EDI",
-    "VIE",
-    "MUC",
-    "JFK",
-    "SEA",
-    "ORD",
-    "PHL",
-    "NCE",
-    "STR",
-    "ZRH",
-    "BSL",
-    "GLA",
+    "CDG", # Paris
+    "EWR", # Newark
+    "EDI", # Edinburgh
+    "VIE", # Vienna
+    "MUC", # Munich
+    "JFK", # JFK
+    "SEA", # Seattle
+    "ORD", # Chicago
+    "PHL", # Philadelphia
+    "NCE", # Nice
+    "STR", # Strasbourg
+    "ZRH", # Zurich
+    "BSL", # Basel
+    "GLA", # Glasgow
 ]
-
-airport_codes = {
-    "FRA": "Frankfurt Am Main",
-    "CDG": "Charles de Gaulle",
-    "EWR": "Newark Liberty",
-    "VIE": "Vienna",
-    "MUC": "Munich",
-    "CPH": "Copenhagen Kastrup",
-    "EDI": "Edinburgh",
-}
-
-
-status_codes = {
-    "FE": "Early",
-    "NI": "",
-    "OT": "On Time",
-    "DL": "Delayed",
-    "NO": "",
-}
 
 
 token = ""
+token_expire_time = ""
 headers = {}
+last_airport_code = ""
 
 
 def getToken():
@@ -103,9 +85,25 @@ def getToken():
   """
     global token
     global headers
-    token_request = requests.post(token_url, data=token_auth)
-    token = token_request.json()["access_token"]
-    headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
+    try:
+      token_request = requests.post(token_url, data=token_auth)
+      if token_request.status_code == requests.codes.ok:
+        token = token_request.json()["access_token"]
+        headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
+    except:
+      # show error, wait 10sec, return
+      text = PapirusText()
+      text.write("Token error. Retrying in 5")
+      sleep(1)
+      text.write("Token error. Retrying in 4")
+      sleep(1)
+      text.write("Token error. Retrying in 3")
+      sleep(1)
+      text.write("Token error. Retrying in 2")
+      sleep(1)
+      text.write("Token error. Retrying in 1")
+      text.Clear()
+      return
 
 
 random_code = ""
@@ -113,6 +111,16 @@ depart_airport_tz = ""
 depart_airport_name = ""
 random_flight = {}
 local_time = dt.datetime.now()
+
+def generateRandomAirportCode():
+    global random_code
+    global last_airport_code
+    temp_code = codesArr[randrange(codesArr.__len__())]
+    if temp_code != last_airport_code:
+        random_code = temp_code
+        last_airport_code = temp_code
+    else:
+        generateRandomAirportCode()
 
 
 def getRandomAirport():
@@ -125,30 +133,11 @@ def getRandomAirport():
     global random_flight
     global local_time
     global api_attempts
-    random_code = codesArr[randrange(codesArr.__len__())]
-    # print(random_code)
-    # Get departure airport info (specifically to get timezone offset)
-    depart_airport_request = requests.get(
-        airport_codes_url + random_code, headers=headers, params=code_params
-    )
-    # returned data from api
-    depart_airport_data = depart_airport_request.json()
-    # check to see if the data has an array of airports or not and get the data appropriately
-    if type(depart_airport_data["AirportResource"]["Airports"]["Airport"]) is list:
-        depart_airport_tz = depart_airport_data["AirportResource"]["Airports"][
-            "Airport"
-        ][0]["TimeZoneId"]
-        depart_airport_name = depart_airport_data["AirportResource"]["Airports"][
-            "Airport"
-        ][0]["Names"]["Name"]["$"]
-    else:
-        depart_airport_tz = depart_airport_data["AirportResource"]["Airports"][
-            "Airport"
-        ]["TimeZoneId"]
-        depart_airport_name = depart_airport_data["AirportResource"]["Airports"][
-            "Airport"
-        ]["Names"]["Name"]["$"]
+    generateRandomAirportCode()
 
+    depart_airport_name = codes.airport_codes_names[random_code]
+    depart_airport_tz = codes.codes_timezone_offset[random_code]
+   
     # get the current time with utc time
     now = dt.datetime.now(tz=dt.timezone.utc)
     # get the local timezone info for the departure airport
@@ -172,134 +161,132 @@ def getRandomAirport():
         sleep(20)
         api_attempts = api_attempts + 1
         if api_attempts > 4:
-            sleep(120)
+            sleep(10)
+            api_attempts = 0
         getRandomAirport()
 
+
+def displayFlightInfo():
+    getToken()
+    if token == "":
+        return
+    # Choose one of the airports to get flights from
+    getRandomAirport()
+    # Airline Info
+    carrier_code = random_flight["OperatingCarrier"]["AirlineID"]
+    airline = codes.carrier_codes[carrier_code]
+
+    # Airport Info
+
+    dest_code = random_flight["Arrival"]["AirportCode"]
+    dest_airport_name = codes.airport_codes_names[dest_code]
+    # print(dest_code)
+    dest_airport_request = requests.get(
+        airport_codes_url + dest_code, headers=headers, params=code_params
+    )
+    dest_airport_data = dest_airport_request.json()
+    # check to see if it's an array or not. sometimes not an array
+    if type(dest_airport_data["AirportResource"]["Airports"]["Airport"]) is list:
+        dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"][0]["Names"]["Name"]["$"]
+    else:
+        dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"]["Names"]["Name"]["$"]
+
+    flight_num = random_flight["OperatingCarrier"]["FlightNumber"]
+
+    # Departure Info
+    dept_time_obj = parse(random_flight["Departure"]["ScheduledTimeUTC"]["DateTime"])
+    timezone = pytz.timezone(depart_airport_tz)
+    dept_time_str = dept_time_obj.astimezone(timezone).strftime("%H:%M")
+    flight_status = random_flight["Departure"]["TimeStatus"]["Code"]
+    flight_status_formatted = codes.status_codes[flight_status]
+
+    terminal_info = (
+        random_flight["Departure"]["Terminal"]
+        if "Terminal" in random_flight["Departure"]
+        else {}
+    )
+
+    gate = " G:" + terminal_info["Gate"] if "Gate" in terminal_info else ""
+    terminal_name = "T:" + terminal_info["Name"] if "Name" in terminal_info else ""
+    terminal = terminal_name + " " + gate
+
+    # Arrival Info
+    arrival_time_obj = parse(random_flight["Arrival"]["ScheduledTimeUTC"]["DateTime"])
+    # arrival_time_str = arrival_time_obj.strftime("%H:%M")
+    flight_length_arr = str(arrival_time_obj - dept_time_obj).split(":")
+    flight_length_hours = (
+        flight_length_arr[0]
+        if len(flight_length_arr[0]) > 1
+        else "0" + flight_length_arr[0]
+    )
+    flight_length = flight_length_hours + ":" + flight_length_arr[1]
+
+    local_time_str = local_time.strftime("%H:%M")
+
+    # initiate screen info
+    textNImg = PapirusComposite(False, rotation=180)
+
+    # Add base background image
+    textNImg.AddImg(
+        "/home/pi/rpi-epaper-airport/display-background2.png",
+        0,
+        0,
+        (200, 96),
+        Id="background",
+    )
+
+    # formatting for display
+    airline_name = airline[:14] if len(airline) > 14 else airline
+
+    depart_airport_name_formatted = (
+        depart_airport_name[:17]
+        if len(depart_airport_name) > 17
+        else depart_airport_name
+    )
+    dest_airport_name_formatted = (
+        dest_airport_name[:17] if len(dest_airport_name) > 17 else dest_airport_name
+    )
+
+    # Title Line
+    textNImg.AddText(
+        airline_name, leftCol, titleLine, titleText, Id="Carrier", invert=True
+    )
+    textNImg.AddText(
+        flight_num, rightCol, titleLine, titleText, Id="Flight", invert=True
+    )
+    # First Line
+    textNImg.AddText(
+        "D:" + depart_airport_name_formatted,
+        firstCol,
+        firstLine,
+        mainText,
+        Id="departAirport",
+    )
+    # Second Line
+    textNImg.AddText(
+        "A:" + dest_airport_name_formatted,
+        firstCol,
+        secondLine,
+        mainText,
+        Id="arriveAirport",
+    )
+    # Third Line
+    textNImg.AddText(terminal, firstCol, thirdLine, mainText, Id="terminal")
+    textNImg.AddText(flight_status_formatted, midCol, thirdLine, mainText, Id="status")
+    # Fourth Line
+    textNImg.AddText("Depart", firstCol, fourthLine, mainText, Id="depart")
+    textNImg.AddText("Length", secondCol, fourthLine, mainText, Id="length")
+    textNImg.AddText("Time", thirdCol, fourthLine, mainText, Id="time")
+    # Fifth Line
+    textNImg.AddText(dept_time_str, firstCol, fifthLine, mainText, Id="deptTime")
+    textNImg.AddText(flight_length, secondCol, fifthLine, mainText, Id="flightLen")
+    textNImg.AddText(local_time_str, thirdCol, fifthLine, mainText, Id="localTime")
+
+    textNImg.WriteAll()
+    sleep(240)
+
+    
 
 while True:
-    getToken()
-    if token != "":
-        # Choose one of the airports to get flights from
-        getRandomAirport()
-        # Airline Info
-        carrier_code = random_flight["OperatingCarrier"]["AirlineID"]
-        carrier_request = requests.get(carrier_codes_url + carrier_code, headers=headers)
-        carrier_data = carrier_request.json()
-        airline = carrier_data["AirlineResource"]["Airlines"]["Airline"]["Names"]["Name"][
-            "$"
-        ]
-
-        # Airport Info
-
-        dest_code = random_flight["Arrival"]["AirportCode"]
-        # print(dest_code)
-        dest_airport_request = requests.get(
-            airport_codes_url + dest_code, headers=headers, params=code_params
-        )
-        dest_airport_data = dest_airport_request.json()
-        # check to see if it's an array or not. sometimes not an array
-        if type(dest_airport_data["AirportResource"]["Airports"]["Airport"]) is list:
-            dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"][
-                0
-            ]["Names"]["Name"]["$"]
-        else:
-            dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"][
-                "Names"
-            ]["Name"]["$"]
-
-        flight_num = random_flight["OperatingCarrier"]["FlightNumber"]
-
-        # Departure Info
-        dept_time_obj = parse(random_flight["Departure"]["ScheduledTimeUTC"]["DateTime"])
-        timezone = pytz.timezone(depart_airport_tz)
-        dept_time_str = dept_time_obj.astimezone(timezone).strftime("%H:%M")
-        flight_status = random_flight["Departure"]["TimeStatus"]["Code"]
-        flight_status_formatted = status_codes[flight_status]
-
-        terminal_info = (
-            random_flight["Departure"]["Terminal"]
-            if "Terminal" in random_flight["Departure"]
-            else {}
-        )
-
-        gate = " G:" + terminal_info["Gate"] if "Gate" in terminal_info else ""
-        terminal_name = "T:" + terminal_info["Name"] if "Name" in terminal_info else ""
-        terminal = terminal_name + " " + gate
-
-        # Arrival Info
-        arrival_time_obj = parse(random_flight["Arrival"]["ScheduledTimeUTC"]["DateTime"])
-        arrival_time_str = arrival_time_obj.strftime("%H:%M")
-        flight_length_arr = str(arrival_time_obj - dept_time_obj).split(":")
-        flight_length_hours = (
-            flight_length_arr[0]
-            if len(flight_length_arr[0]) > 1
-            else "0" + flight_length_arr[0]
-        )
-        flight_length = flight_length_hours + ":" + flight_length_arr[1]
-
-        local_time_str = local_time.strftime("%H:%M")
-
-        # initiate screen info
-        textNImg = PapirusComposite(False, rotation=180)
-
-        # Add base background image
-        textNImg.AddImg(
-            "/home/pi/rpi-epaper-airport/display-background2.png",
-            0,
-            0,
-            (200, 96),
-            Id="background",
-        )
-
-        # formatting for display
-        airline_name = airline[:14] if len(airline) > 14 else airline
-
-        depart_airport_name_formatted = (
-            depart_airport_name[:17]
-            if len(depart_airport_name) > 17
-            else depart_airport_name
-        )
-        dest_airport_name_formatted = (
-            dest_airport_name[:17] if len(dest_airport_name) > 17 else dest_airport_name
-        )
-
-        # Title Line
-        textNImg.AddText(
-            airline_name, leftCol, titleLine, titleText, Id="Carrier", invert=True
-        )
-        textNImg.AddText(
-            flight_num, rightCol, titleLine, titleText, Id="Flight", invert=True
-        )
-        # First Line
-        textNImg.AddText(
-            "D:" + depart_airport_name_formatted,
-            firstCol,
-            firstLine,
-            mainText,
-            Id="departAirport",
-        )
-        # Second Line
-        textNImg.AddText(
-            "A:" + dest_airport_name_formatted,
-            firstCol,
-            secondLine,
-            mainText,
-            Id="arriveAirport",
-        )
-        # Third Line
-        textNImg.AddText(terminal, firstCol, thirdLine, mainText, Id="terminal")
-        textNImg.AddText(flight_status_formatted, midCol, thirdLine, mainText, Id="status")
-        # Fourth Line
-        textNImg.AddText("Depart", firstCol, fourthLine, mainText, Id="depart")
-        textNImg.AddText("Length", secondCol, fourthLine, mainText, Id="length")
-        textNImg.AddText("Time", thirdCol, fourthLine, mainText, Id="time")
-        # Fifth Line
-        textNImg.AddText(dept_time_str, firstCol, fifthLine, mainText, Id="deptTime")
-        textNImg.AddText(flight_length, secondCol, fifthLine, mainText, Id="flightLen")
-        textNImg.AddText(local_time_str, thirdCol, fifthLine, mainText, Id="localTime")
-
-        textNImg.WriteAll()
-    else:
-        print("no token")
-    sleep(240)
+    displayFlightInfo()
 
