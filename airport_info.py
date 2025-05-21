@@ -152,7 +152,7 @@ def getRandomAirport():
         textNImg.UpdateText("Start", "Flight(s) found")
         textNImg.WriteAll()
         if type(flights_data["FlightStatusResource"]["Flights"]["Flight"]) is list:
-            flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"][0]
+            flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"]
             random_flight = flights_array[randrange(flights_array.__len__())]
         else:
             random_flight = flights_data["FlightStatusResource"]["Flights"]["Flight"]
