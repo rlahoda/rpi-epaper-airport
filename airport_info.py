@@ -147,8 +147,11 @@ def getRandomAirport():
     if flights_request.status_code == requests.codes.ok:
         # print("Flight Found")
         flights_data = flights_request.json()
-        flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"]
-        random_flight = flights_array[randrange(flights_array.__len__())]
+        if type(flights_data["FlightStatusResource"]["Flights"]["Flight"]) is list:
+            flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"][0]
+            random_flight = flights_array[randrange(flights_array.__len__())]
+        else:
+            random_flight = flights_data["FlightStatusResource"]["Flights"]["Flight"]
     else:
         textNImg.UpdateText("Start", "Flight error")
         textNImg.WriteAll()
