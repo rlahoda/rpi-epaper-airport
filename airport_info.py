@@ -79,20 +79,8 @@ last_airport_code = ""
 textNImg = PapirusComposite(False)
 # textNImg = PapirusComposite(False, rotation=180) # This flips the readout 180 degrees
 # textNImg = PapirusComposite() # This puts up info without needing the .WriteAll() function
-textNImg.AddImg(
-    "/home/pi/rpi-epaper-airport/display-background2.png",
-    0,
-    0,
-    (200, 96),
-    Id="background",
-)
-textNImg.AddText(
-    "Initializing", leftCol, titleLine, titleText, Id="Carrier", invert=True
-)
-# textNImg.AddText("Initializing", Id="Start")
+textNImg.AddText("Initializing", Id="Start")
 textNImg.WriteAll()
-
-
 def getToken():
     """
   Fetches an auth token from the api
@@ -140,7 +128,6 @@ def getRandomAirport():
     global local_time
 
     generateRandomAirportCode()
-    
 
     depart_airport_name = codes.airport_codes_names[random_code]
     depart_airport_tz = codes.codes_timezone_offset[random_code]
@@ -227,17 +214,18 @@ def displayFlightInfo():
     flight_length = flight_length_hours + ":" + flight_length_arr[1]
 
     local_time_str = local_time.strftime("%H:%M")
-    textNImg.Clear()
+    # textNImg.Clear()
+
     
     # textNImg.WriteAll()
     # Add base background image
-    # textNImg.AddImg(
-    #     "/home/pi/rpi-epaper-airport/display-background2.png",
-    #     0,
-    #     0,
-    #     (200, 96),
-    #     Id="background",
-    # )
+    textNImg.AddImg(
+        "/home/pi/rpi-epaper-airport/display-background2.png",
+        0,
+        0,
+        (200, 96),
+        Id="background",
+    )
 
     # formatting for display
     airline_name = airline[:14] if len(airline) > 14 else airline
@@ -250,11 +238,11 @@ def displayFlightInfo():
     dest_airport_name_formatted = (
         dest_airport_name[:17] if len(dest_airport_name) > 17 else dest_airport_name
     )
-    textNImg.UpdateText("Carrier", "")
-    textNImg.WriteAll()
 
     # Title Line
-    textNImg.UpdateText("Carrier", airline_name)
+    textNImg.AddText(
+        airline_name, leftCol, titleLine, titleText, Id="Carrier", invert=True
+    )
     textNImg.AddText(
         flight_num, rightCol, titleLine, titleText, Id="Flight", invert=True
     )
