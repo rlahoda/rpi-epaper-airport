@@ -141,17 +141,23 @@ def getRandomAirport():
     # make a string out of the local time to insert into the api url
     now_str = local_time.strftime("%Y-%m-%dT%H:%M")
     # trigger
+    textNImg.UpdateText("Start", "Looking for Flight(s)")
+    textNImg.WriteAll()
     flights_request = requests.get(
         flights_url + random_code + "/" + now_str, headers=headers, params=params
     )
     if flights_request.status_code == requests.codes.ok:
         # print("Flight Found")
         flights_data = flights_request.json()
+        textNImg.UpdateText("Start", "Flight(s) found")
+        textNImg.WriteAll()
         if type(flights_data["FlightStatusResource"]["Flights"]["Flight"]) is list:
             flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"][0]
             random_flight = flights_array[randrange(flights_array.__len__())]
         else:
             random_flight = flights_data["FlightStatusResource"]["Flights"]["Flight"]
+        textNImg.UpdateText("Start", "Flight chosen")
+        textNImg.WriteAll()
     else:
         textNImg.UpdateText("Start", "Flight error")
         textNImg.WriteAll()
