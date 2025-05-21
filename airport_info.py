@@ -94,7 +94,7 @@ def getToken():
           headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
           text.UpdateText("Start", "Token aquired")
           sleep(1)
-          text.RemoveText("Start")
+          # text.RemoveText("Start")
     except:
       # show error, wait, return
       
@@ -108,7 +108,7 @@ def getToken():
       sleep(1)
       text.UpdateText("Start", "Token error. Retrying in 1")
       sleep(1)
-      text.RemoveText("Start")
+      # text.RemoveText("Start")
       return
 
 
@@ -179,8 +179,6 @@ def getRandomAirport():
 
 def displayFlightInfo():
     getToken()
-    if token == "":
-        return
     # Choose one of the airports to get flights from
     getRandomAirport()
     # Airline Info
