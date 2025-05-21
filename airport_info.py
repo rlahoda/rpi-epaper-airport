@@ -180,7 +180,6 @@ def getRandomAirport():
         textNImg.UpdateText("Start", "Flight error")
         textNImg.WriteAll()
         # print("Flight Error")
-        sleep(20)
         api_attempts = api_attempts + 1
         if api_attempts > 4:
             sleep(10)
@@ -250,7 +249,7 @@ def displayFlightInfo():
     flight_length = flight_length_hours + ":" + flight_length_arr[1]
 
     local_time_str = local_time.strftime("%H:%M")
-    textNImg.Clear()
+    # textNImg.Clear()
     # initiate screen info
     # textNImg = PapirusComposite(False, rotation=180)
 
