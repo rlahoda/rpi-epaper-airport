@@ -78,7 +78,7 @@ token_expire_time = ""
 headers = {}
 last_airport_code = ""
 
-text = PapirusTextPos()
+text = PapirusComposite()
 text.AddText("Initializing", Id="Start")
 def getToken():
     """
@@ -194,13 +194,17 @@ def displayFlightInfo():
     dest_airport_request = requests.get(
         airport_codes_url + dest_code, headers=headers, params=code_params
     )
-    dest_airport_data = dest_airport_request.json()
-    # check to see if it's an array or not. sometimes not an array
-    if type(dest_airport_data["AirportResource"]["Airports"]["Airport"]) is list:
-        dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"][0]["Names"]["Name"]["$"]
+    if dest_airport_request.status_code == requests.codes.ok:
+        text.UpdateText("Start", "Destination airport found")
+        dest_airport_data = dest_airport_request.json()
+        # check to see if it's an array or not. sometimes not an array
+        if type(dest_airport_data["AirportResource"]["Airports"]["Airport"]) is list:
+            dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"][0]["Names"]["Name"]["$"]
+        else:
+            dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"]["Names"]["Name"]["$"]
     else:
-        dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"]["Names"]["Name"]["$"]
-
+        text.UpdateText("Start", "Destination airport error")
+        return
     flight_num = random_flight["OperatingCarrier"]["FlightNumber"]
 
     # Departure Info
@@ -232,7 +236,7 @@ def displayFlightInfo():
     flight_length = flight_length_hours + ":" + flight_length_arr[1]
 
     local_time_str = local_time.strftime("%H:%M")
-
+    text.Clear()
     # initiate screen info
     textNImg = PapirusComposite(False, rotation=180)
 
