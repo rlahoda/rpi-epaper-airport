@@ -127,6 +127,7 @@ def generateRandomAirportCode():
         last_airport_code = temp_code
     else:
         generateRandomAirportCode()
+    text.UpdateText("Start", "Using code:" + random_code)
 
 
 def getRandomAirport():
@@ -139,6 +140,7 @@ def getRandomAirport():
     global random_flight
     global local_time
     global api_attempts
+    text.UpdateText("Start", "Getting airport code")
     generateRandomAirportCode()
 
     depart_airport_name = codes.airport_codes_names[random_code]
@@ -152,17 +154,20 @@ def getRandomAirport():
     local_time = now.astimezone(timezone)
     # make a string out of the local time to insert into the api url
     now_str = local_time.strftime("%Y-%m-%dT%H:%M")
+    text.UpdateText("Start", "Getting flights")
     # trigger
     flights_request = requests.get(
         flights_url + random_code + "/" + now_str, headers=headers, params=params
     )
     if flights_request.status_code == requests.codes.ok:
         # print("Flight Found")
+        text.UpdateText("Start", "Flight found")
         api_attempts = 0
         flights_data = flights_request.json()
         flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"]
         random_flight = flights_array[randrange(flights_array.__len__())]
     else:
+        text.UpdateText("Start", "Flight error")
         # print("Flight Error")
         sleep(20)
         api_attempts = api_attempts + 1
@@ -186,6 +191,7 @@ def displayFlightInfo():
 
     dest_code = random_flight["Arrival"]["AirportCode"]
     dest_airport_name = codes.airport_codes_names[dest_code]
+    text.UpdateText("Start", "Getting destination airport")
     # print(dest_code)
     dest_airport_request = requests.get(
         airport_codes_url + dest_code, headers=headers, params=code_params
