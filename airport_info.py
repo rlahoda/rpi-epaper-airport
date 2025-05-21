@@ -272,12 +272,12 @@ def displayFlightInfo():
     textNImg.AddText(local_time_str, thirdCol, fifthLine, mainText, Id="localTime")
 
     textNImg.WriteAll()
-    airline_name = ""
-    flight_num = ""
-    dest_airport_name_formatted = ""
-    dept_time_str = ""
-    flight_length = ""
-    local_time_str = ""
+    # airline_name = ""
+    # flight_num = ""
+    # dest_airport_name_formatted = ""
+    # dept_time_str = ""
+    # flight_length = ""
+    # local_time_str = ""
     sleep(240)
 
     
