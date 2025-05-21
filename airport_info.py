@@ -215,6 +215,7 @@ def displayFlightInfo():
 
     local_time_str = local_time.strftime("%H:%M")
     textNImg.Clear()
+    textNImg = None
     # Add base background image
     textNImg.AddImg(
         "/home/pi/rpi-epaper-airport/display-background2.png",
@@ -272,12 +273,7 @@ def displayFlightInfo():
     textNImg.AddText(local_time_str, thirdCol, fifthLine, mainText, Id="localTime")
 
     textNImg.WriteAll()
-    # airline_name = ""
-    # flight_num = ""
-    # dest_airport_name_formatted = ""
-    # dept_time_str = ""
-    # flight_length = ""
-    # local_time_str = ""
+
     sleep(240)
 
     
