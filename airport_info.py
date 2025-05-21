@@ -168,9 +168,9 @@ def displayFlightInfo():
     getRandomAirport()
     # Airline Info
     carrier_code = random_flight["OperatingCarrier"]["AirlineID"]
-    airline = codes.carrier_codes[carrier_code]
-    textNImg.UpdateText("Start", "Airline: " + airline)
+    textNImg.UpdateText("Start", "Carrier code: " + carrier_code)
     textNImg.WriteAll()
+    airline = codes.carrier_codes[carrier_code]
     # Airport Info
 
     dest_code = random_flight["Arrival"]["AirportCode"]
