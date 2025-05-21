@@ -89,11 +89,14 @@ textNImg.AddImg(
 textNImg.AddText(
     "Initializing", leftCol, titleLine, titleText, Id="Carrier", invert=True
 )
-textNImg.AddText(
-        "", rightCol, titleLine, titleText, Id="Flight", invert=True
-    )
 # textNImg.AddText("Initializing", Id="Start")
 textNImg.WriteAll()
+textNImg.UpdateText(
+        "Code", leftCol, titleLine, titleText, Id="Carrier", invert=True
+    )
+textNImg.WriteAll()
+
+
 def getToken():
     """
   Fetches an auth token from the api
@@ -141,6 +144,7 @@ def getRandomAirport():
     global local_time
 
     generateRandomAirportCode()
+    
 
     depart_airport_name = codes.airport_codes_names[random_code]
     depart_airport_tz = codes.codes_timezone_offset[random_code]
@@ -250,9 +254,13 @@ def displayFlightInfo():
     dest_airport_name_formatted = (
         dest_airport_name[:17] if len(dest_airport_name) > 17 else dest_airport_name
     )
+    textNImg.UpdateText(
+        "", leftCol, titleLine, titleText, Id="Carrier", invert=True
+    )
+    textNImg.WriteAll()
 
     # Title Line
-    textNImg.AddText(
+    textNImg.UpdateText(
         airline_name, leftCol, titleLine, titleText, Id="Carrier", invert=True
     )
     textNImg.AddText(
