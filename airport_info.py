@@ -44,7 +44,6 @@ if login_info.token_auth:
 token = ""
 params = {"serviceType": "passenger", "limit": "10"}
 code_params = {"lang": "en"}
-api_attempts = 0
 
 # API URLs
 code_url = ""
@@ -77,7 +76,8 @@ token = ""
 token_expire_time = ""
 headers = {}
 last_airport_code = ""
-textNImg = PapirusComposite(False, rotation=180)
+textNImg = PapirusComposite(False)
+# textNImg = PapirusComposite(False, rotation=180)
 # textNImg = PapirusComposite()
 textNImg.AddText("Initializing", Id="Start")
 textNImg.WriteAll()
@@ -92,29 +92,11 @@ def getToken():
       if token_request.status_code == requests.codes.ok:
           token = token_request.json()["access_token"]
           headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
-          textNImg.UpdateText("Start", "Token aquired")
-          textNImg.WriteAll()
-          sleep(1)
-          # textNImg.RemoveText("Start")
     except:
       # show error, wait, return
       
-      textNImg.UpdateText("Start", "Token error. Retrying in 5")
+      textNImg.UpdateText("Start", "Token error.")
       textNImg.WriteAll()
-      sleep(1)
-      textNImg.UpdateText("Start", "Token error. Retrying in 4")
-      textNImg.WriteAll()
-      sleep(1)
-      textNImg.UpdateText("Start", "Token error. Retrying in 3")
-      textNImg.WriteAll()
-      sleep(1)
-      textNImg.UpdateText("Start", "Token error. Retrying in 2")
-      textNImg.WriteAll()
-      sleep(1)
-      textNImg.UpdateText("Start", "Token error. Retrying in 1")
-      textNImg.WriteAll()
-      sleep(1)
-      # textNImg.RemoveText("Start")
       return
 
 
@@ -146,9 +128,7 @@ def getRandomAirport():
     global depart_airport_name
     global random_flight
     global local_time
-    global api_attempts
-    textNImg.UpdateText("Start", "Getting airport code")
-    textNImg.WriteAll()
+
     generateRandomAirportCode()
 
     depart_airport_name = codes.airport_codes_names[random_code]
@@ -172,18 +152,12 @@ def getRandomAirport():
         # print("Flight Found")
         textNImg.UpdateText("Start", "Flight found")
         textNImg.WriteAll()
-        api_attempts = 0
         flights_data = flights_request.json()
         flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"]
         random_flight = flights_array[randrange(flights_array.__len__())]
     else:
         textNImg.UpdateText("Start", "Flight error")
         textNImg.WriteAll()
-        # print("Flight Error")
-        api_attempts = api_attempts + 1
-        if api_attempts > 4:
-            sleep(10)
-            api_attempts = 0
         getRandomAirport()
 
 
@@ -194,7 +168,8 @@ def displayFlightInfo():
     # Airline Info
     carrier_code = random_flight["OperatingCarrier"]["AirlineID"]
     airline = codes.carrier_codes[carrier_code]
-
+    textNImg.UpdateText("Start", "Airline: " + airline)
+    textNImg.WriteAll()
     # Airport Info
 
     dest_code = random_flight["Arrival"]["AirportCode"]
