@@ -77,8 +77,8 @@ token_expire_time = ""
 headers = {}
 last_airport_code = ""
 textNImg = PapirusComposite(False)
-# textNImg = PapirusComposite(False, rotation=180)
-# textNImg = PapirusComposite()
+# textNImg = PapirusComposite(False, rotation=180) # This flips the readout 180 degrees
+# textNImg = PapirusComposite() # This puts up info without needing the .WriteAll() function
 textNImg.AddText("Initializing", Id="Start")
 textNImg.WriteAll()
 def getToken():
@@ -141,23 +141,17 @@ def getRandomAirport():
     # make a string out of the local time to insert into the api url
     now_str = local_time.strftime("%Y-%m-%dT%H:%M")
     # trigger
-    textNImg.UpdateText("Start", "Looking for Flight(s)")
-    textNImg.WriteAll()
     flights_request = requests.get(
         flights_url + random_code + "/" + now_str, headers=headers, params=params
     )
     if flights_request.status_code == requests.codes.ok:
         # print("Flight Found")
         flights_data = flights_request.json()
-        textNImg.UpdateText("Start", "Flight(s) found")
-        textNImg.WriteAll()
         if type(flights_data["FlightStatusResource"]["Flights"]["Flight"]) is list:
             flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"]
             random_flight = flights_array[randrange(flights_array.__len__())]
         else:
             random_flight = flights_data["FlightStatusResource"]["Flights"]["Flight"]
-        textNImg.UpdateText("Start", "Flight chosen")
-        textNImg.WriteAll()
     else:
         textNImg.UpdateText("Start", "Flight error")
         textNImg.WriteAll()
@@ -171,23 +165,14 @@ def displayFlightInfo():
     getRandomAirport()
     # Airline Info
     carrier_code = random_flight["OperatingCarrier"]["AirlineID"]
-    textNImg.UpdateText("Start", "Carrier code: " + carrier_code)
-    textNImg.WriteAll()
     airline = codes.carrier_codes[carrier_code]["Name"]
     # Airport Info
-    textNImg.UpdateText("Start", "Airline: " + airline)
-    textNImg.WriteAll()
-
     dest_code = random_flight["Arrival"]["AirportCode"]
-    textNImg.UpdateText("Start", "Getting destination airport")
-    textNImg.WriteAll()
     # print(dest_code)
     dest_airport_request = requests.get(
         airport_codes_url + dest_code, headers=headers, params=code_params
     )
     if dest_airport_request.status_code == requests.codes.ok:
-        textNImg.UpdateText("Start", "Destination airport found")
-        textNImg.WriteAll()
         dest_airport_data = dest_airport_request.json()
         # check to see if it's an array or not. sometimes not an array
         if type(dest_airport_data["AirportResource"]["Airports"]["Airport"]) is list:
@@ -229,9 +214,6 @@ def displayFlightInfo():
     flight_length = flight_length_hours + ":" + flight_length_arr[1]
 
     local_time_str = local_time.strftime("%H:%M")
-    # textNImg.Clear()
-    # initiate screen info
-    # textNImg = PapirusComposite(False, rotation=180)
 
     # Add base background image
     textNImg.AddImg(
