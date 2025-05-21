@@ -79,7 +79,20 @@ last_airport_code = ""
 textNImg = PapirusComposite(False)
 # textNImg = PapirusComposite(False, rotation=180) # This flips the readout 180 degrees
 # textNImg = PapirusComposite() # This puts up info without needing the .WriteAll() function
-textNImg.AddText("Initializing", Id="Start")
+textNImg.AddImg(
+    "/home/pi/rpi-epaper-airport/display-background2.png",
+    0,
+    0,
+    (200, 96),
+    Id="background",
+)
+textNImg.AddText(
+    "Initializing", leftCol, titleLine, titleText, Id="Carrier", invert=True
+)
+textNImg.AddText(
+        "", rightCol, titleLine, titleText, Id="Flight", invert=True
+    )
+# textNImg.AddText("Initializing", Id="Start")
 textNImg.WriteAll()
 def getToken():
     """
@@ -214,17 +227,17 @@ def displayFlightInfo():
     flight_length = flight_length_hours + ":" + flight_length_arr[1]
 
     local_time_str = local_time.strftime("%H:%M")
-    textNImg.Clear()
+    # textNImg.Clear()
     
-    textNImg.WriteAll()
+    # textNImg.WriteAll()
     # Add base background image
-    textNImg.AddImg(
-        "/home/pi/rpi-epaper-airport/display-background2.png",
-        0,
-        0,
-        (200, 96),
-        Id="background",
-    )
+    # textNImg.AddImg(
+    #     "/home/pi/rpi-epaper-airport/display-background2.png",
+    #     0,
+    #     0,
+    #     (200, 96),
+    #     Id="background",
+    # )
 
     # formatting for display
     airline_name = airline[:14] if len(airline) > 14 else airline
@@ -239,10 +252,10 @@ def displayFlightInfo():
     )
 
     # Title Line
-    textNImg.AddText(
+    textNImg.UpdateText(
         airline_name, leftCol, titleLine, titleText, Id="Carrier", invert=True
     )
-    textNImg.AddText(
+    textNImg.UpdateText(
         flight_num, rightCol, titleLine, titleText, Id="Flight", invert=True
     )
     # First Line
