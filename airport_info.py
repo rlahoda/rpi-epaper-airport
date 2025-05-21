@@ -172,6 +172,8 @@ def displayFlightInfo():
     textNImg.WriteAll()
     airline = codes.carrier_codes[carrier_code]
     # Airport Info
+    textNImg.UpdateText("Start", "Airline: " + airline)
+    textNImg.WriteAll()
 
     dest_code = random_flight["Arrival"]["AirportCode"]
     dest_airport_name = codes.airport_codes_names[dest_code]
