@@ -252,10 +252,10 @@ def displayFlightInfo():
     )
 
     # Title Line
-    textNImg.UpdateText(
+    textNImg.AddText(
         airline_name, leftCol, titleLine, titleText, Id="Carrier", invert=True
     )
-    textNImg.UpdateText(
+    textNImg.AddText(
         flight_num, rightCol, titleLine, titleText, Id="Flight", invert=True
     )
     # First Line
