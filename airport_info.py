@@ -91,9 +91,7 @@ textNImg.AddText(
 )
 # textNImg.AddText("Initializing", Id="Start")
 textNImg.WriteAll()
-textNImg.UpdateText(
-        "Code", leftCol, titleLine, titleText, Id="Carrier", invert=True
-    )
+textNImg.UpdateText("Carrier", "Code")
 textNImg.WriteAll()
 
 
