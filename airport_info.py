@@ -91,8 +91,6 @@ textNImg.AddText(
 )
 # textNImg.AddText("Initializing", Id="Start")
 textNImg.WriteAll()
-textNImg.UpdateText("Carrier", "Code")
-textNImg.WriteAll()
 
 
 def getToken():
@@ -252,15 +250,11 @@ def displayFlightInfo():
     dest_airport_name_formatted = (
         dest_airport_name[:17] if len(dest_airport_name) > 17 else dest_airport_name
     )
-    textNImg.UpdateText(
-        "", leftCol, titleLine, titleText, Id="Carrier", invert=True
-    )
+    textNImg.UpdateText("Carrier", "")
     textNImg.WriteAll()
 
     # Title Line
-    textNImg.UpdateText(
-        airline_name, leftCol, titleLine, titleText, Id="Carrier", invert=True
-    )
+    textNImg.UpdateText("Carrier", airline_name)
     textNImg.AddText(
         flight_num, rightCol, titleLine, titleText, Id="Flight", invert=True
     )
