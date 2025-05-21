@@ -78,8 +78,9 @@ token_expire_time = ""
 headers = {}
 last_airport_code = ""
 textNImg = PapirusComposite(False, rotation=180)
-textNImg = PapirusComposite()
+# textNImg = PapirusComposite()
 textNImg.AddText("Initializing", Id="Start")
+textNImg.WriteAll()
 def getToken():
     """
   Fetches an auth token from the api
@@ -92,20 +93,26 @@ def getToken():
           token = token_request.json()["access_token"]
           headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
           textNImg.UpdateText("Start", "Token aquired")
+          textNImg.WriteAll()
           sleep(1)
           # textNImg.RemoveText("Start")
     except:
       # show error, wait, return
       
       textNImg.UpdateText("Start", "Token error. Retrying in 5")
+      textNImg.WriteAll()
       sleep(1)
       textNImg.UpdateText("Start", "Token error. Retrying in 4")
+      textNImg.WriteAll()
       sleep(1)
       textNImg.UpdateText("Start", "Token error. Retrying in 3")
+      textNImg.WriteAll()
       sleep(1)
       textNImg.UpdateText("Start", "Token error. Retrying in 2")
+      textNImg.WriteAll()
       sleep(1)
       textNImg.UpdateText("Start", "Token error. Retrying in 1")
+      textNImg.WriteAll()
       sleep(1)
       # textNImg.RemoveText("Start")
       return
@@ -127,6 +134,7 @@ def generateRandomAirportCode():
     else:
         generateRandomAirportCode()
     textNImg.UpdateText("Start", "Using code:" + random_code)
+    textNImg.WriteAll()
 
 
 def getRandomAirport():
@@ -140,6 +148,7 @@ def getRandomAirport():
     global local_time
     global api_attempts
     textNImg.UpdateText("Start", "Getting airport code")
+    textNImg.WriteAll()
     generateRandomAirportCode()
 
     depart_airport_name = codes.airport_codes_names[random_code]
@@ -154,6 +163,7 @@ def getRandomAirport():
     # make a string out of the local time to insert into the api url
     now_str = local_time.strftime("%Y-%m-%dT%H:%M")
     textNImg.UpdateText("Start", "Getting flights")
+    textNImg.WriteAll()
     # trigger
     flights_request = requests.get(
         flights_url + random_code + "/" + now_str, headers=headers, params=params
@@ -161,12 +171,14 @@ def getRandomAirport():
     if flights_request.status_code == requests.codes.ok:
         # print("Flight Found")
         textNImg.UpdateText("Start", "Flight found")
+        textNImg.WriteAll()
         api_attempts = 0
         flights_data = flights_request.json()
         flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"]
         random_flight = flights_array[randrange(flights_array.__len__())]
     else:
         textNImg.UpdateText("Start", "Flight error")
+        textNImg.WriteAll()
         # print("Flight Error")
         sleep(20)
         api_attempts = api_attempts + 1
@@ -189,12 +201,14 @@ def displayFlightInfo():
     dest_code = random_flight["Arrival"]["AirportCode"]
     dest_airport_name = codes.airport_codes_names[dest_code]
     textNImg.UpdateText("Start", "Getting destination airport")
+    textNImg.WriteAll()
     # print(dest_code)
     dest_airport_request = requests.get(
         airport_codes_url + dest_code, headers=headers, params=code_params
     )
     if dest_airport_request.status_code == requests.codes.ok:
         textNImg.UpdateText("Start", "Destination airport found")
+        textNImg.WriteAll()
         dest_airport_data = dest_airport_request.json()
         # check to see if it's an array or not. sometimes not an array
         if type(dest_airport_data["AirportResource"]["Airports"]["Airport"]) is list:
@@ -203,6 +217,7 @@ def displayFlightInfo():
             dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"]["Names"]["Name"]["$"]
     else:
         textNImg.UpdateText("Start", "Destination airport error")
+        textNImg.WriteAll()
         return
     flight_num = random_flight["OperatingCarrier"]["FlightNumber"]
 
