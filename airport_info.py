@@ -179,7 +179,6 @@ def displayFlightInfo():
     textNImg.WriteAll()
 
     dest_code = random_flight["Arrival"]["AirportCode"]
-    dest_airport_name = codes.airport_codes_names[dest_code]
     textNImg.UpdateText("Start", "Getting destination airport")
     textNImg.WriteAll()
     # print(dest_code)
