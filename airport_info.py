@@ -214,8 +214,22 @@ def displayFlightInfo():
     flight_length = flight_length_hours + ":" + flight_length_arr[1]
 
     local_time_str = local_time.strftime("%H:%M")
-    textNImg.Clear()
-    textNImg = None
+    # textNImg.Clear()
+    textNImg.RemoveText("Start")
+    textNImg.RemoveText("Carrier")
+    textNImg.RemoveText("Flight")
+    textNImg.RemoveText("departAirport")
+    textNImg.RemoveText("arriveAirport")
+    textNImg.RemoveText("terminal")
+    textNImg.RemoveText("status")
+    textNImg.RemoveText("depart")
+    textNImg.RemoveText("length")
+    textNImg.RemoveText("time")
+    textNImg.RemoveText("deptTime")
+    textNImg.RemoveText("flightLen")
+    textNImg.RemoveText("localTime")
+    
+    textNImg.WriteAll()
     # Add base background image
     textNImg.AddImg(
         "/home/pi/rpi-epaper-airport/display-background2.png",
