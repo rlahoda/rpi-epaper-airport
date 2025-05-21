@@ -115,8 +115,6 @@ def generateRandomAirportCode():
         last_airport_code = temp_code
     else:
         generateRandomAirportCode()
-    textNImg.UpdateText("Start", "Using code:" + random_code)
-    textNImg.WriteAll()
 
 
 def getRandomAirport():
@@ -142,8 +140,6 @@ def getRandomAirport():
     local_time = now.astimezone(timezone)
     # make a string out of the local time to insert into the api url
     now_str = local_time.strftime("%Y-%m-%dT%H:%M")
-    textNImg.UpdateText("Start", "Getting flights")
-    textNImg.WriteAll()
     # trigger
     flights_request = requests.get(
         flights_url + random_code + "/" + now_str, headers=headers, params=params
@@ -153,13 +149,11 @@ def getRandomAirport():
         flights_data = flights_request.json()
         flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"]
         random_flight = flights_array[randrange(flights_array.__len__())]
-        textNImg.UpdateText("Start", "Flight found")
-        textNImg.WriteAll()
     else:
         textNImg.UpdateText("Start", "Flight error")
         textNImg.WriteAll()
         getRandomAirport()
-    return
+
 
 
 def displayFlightInfo():
@@ -170,7 +164,7 @@ def displayFlightInfo():
     carrier_code = random_flight["OperatingCarrier"]["AirlineID"]
     textNImg.UpdateText("Start", "Carrier code: " + carrier_code)
     textNImg.WriteAll()
-    airline = codes.carrier_codes[carrier_code]
+    airline = codes.carrier_codes[carrier_code]["Name"]
     # Airport Info
     textNImg.UpdateText("Start", "Airline: " + airline)
     textNImg.WriteAll()
