@@ -81,6 +81,16 @@ textNImg = PapirusComposite(False)
 # textNImg = PapirusComposite() # This puts up info without needing the .WriteAll() function
 textNImg.AddText("Initializing", Id="Start")
 textNImg.WriteAll()
+
+textNImg.AddImg(
+    "/home/pi/rpi-epaper-airport/display-background2.png",
+    0,
+    0,
+    (200, 96),
+    Id="background",
+)
+
+
 def getToken():
     """
   Fetches an auth token from the api
@@ -219,14 +229,15 @@ def displayFlightInfo():
     
     # textNImg.WriteAll()
     # Add base background image
-    textNImg.AddImg(
-        "/home/pi/rpi-epaper-airport/display-background2.png",
-        0,
-        0,
-        (200, 96),
-        Id="background",
-    )
+    # textNImg.AddImg(
+    #     "/home/pi/rpi-epaper-airport/display-background2.png",
+    #     0,
+    #     0,
+    #     (200, 96),
+    #     Id="background",
+    # )
 
+    textNImg.UpdateImg("background", "/home/pi/rpi-epaper-airport/display-background2.png")
     # formatting for display
     airline_name = airline[:14] if len(airline) > 14 else airline
 
