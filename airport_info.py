@@ -214,7 +214,6 @@ def displayFlightInfo():
     flight_length = flight_length_hours + ":" + flight_length_arr[1]
 
     local_time_str = local_time.strftime("%H:%M")
-    textNImg.RemoveText("Start")
     textNImg.Clear()
     # Add base background image
     textNImg.AddImg(
