@@ -109,6 +109,8 @@ def getToken():
     global token
     global headers
     # set time to check as 1min before token should expire
+    textNImg.UpdateText("Start", "Checking token ")
+    textNImg.WriteAll()
     temp_expire_time = token_expire_time - dt.timedelta(minutes=1)
     textNImg.UpdateText("Start", "Temp expire time: " + temp_expire_time)
     textNImg.WriteAll()
