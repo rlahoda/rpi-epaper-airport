@@ -111,7 +111,7 @@ def getToken():
     # set time to check as 1min before token should expire
     textNImg.UpdateText("Start", "Checking token ")
     textNImg.WriteAll()
-    textNImg.UpdateText("Start", token_expire_time.strftime("%Y-%m-%dT%H:%M"))
+    textNImg.UpdateText("Start", str(token_expire_time))
     textNImg.WriteAll()
     temp_expire_time = token_expire_time - dt.timedelta(minutes=1)
     textNImg.UpdateText("Start", "Temp expire time: " + temp_expire_time)
