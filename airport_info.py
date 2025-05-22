@@ -34,6 +34,12 @@ button2 = Button(19)
 button3 = Button(20)
 button4 = Button(16)
 
+# reuse token for more than one call at a time
+# add check to filter out certain airlines i don't care for
+# try to figure out why it's refreshing the screen 3-4 times each cycle
+
+
+
 
 # API Variables
 token_url = "https://api.lufthansa.com/v1/oauth/token"
@@ -69,6 +75,7 @@ codesArr = [
     "ZRH", # Zurich
     "BSL", # Basel
     "GLA", # Glasgow
+    "DUB", # Dublin
 ]
 
 
@@ -155,13 +162,28 @@ def getRandomAirport():
         flights_url + random_code + "/" + now_str, headers=headers, params=params
     )
     if flights_request.status_code == requests.codes.ok:
-        # print("Flight Found")
         flights_data = flights_request.json()
         if type(flights_data["FlightStatusResource"]["Flights"]["Flight"]) is list:
             flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"]
-            random_flight = flights_array[randrange(flights_array.__len__())]
+            random_flight_found = False
+            while random_flight_found is False:
+              if len(flights_array) != 0:
+                  random_index = randrange(flights_array.__len__())
+                  temp_flight = flights_array[random_index]
+                  if temp_flight["MarketingCarrier"]["AirlineID"] not in codes.ignore_carrier_codes:
+                      random_flight = temp_flight
+                      random_flight_found = True
+                  else:
+                      flights_array.pop(random_index)
+              else:
+                  getRandomAirport()
+
         else:
-            random_flight = flights_data["FlightStatusResource"]["Flights"]["Flight"]
+            if temp_flight["MarketingCarrier"]["AirlineID"] not in codes.ignore_carrier_codes:
+                random_flight = flights_data["FlightStatusResource"]["Flights"]["Flight"]
+            else:
+                getRandomAirport()
+
     else:
         textNImg.UpdateText("Start", "Flight error")
         textNImg.WriteAll()

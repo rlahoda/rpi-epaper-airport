@@ -14,6 +14,7 @@ codes_timezone_offset = {
     "ZRH": "Europe/Zurich",
     "BSL": "Europe/Zurich",
     "GLA": "Europe/London",
+    "DUB": "Europe/London",
 }
 
 airport_codes_names = {
@@ -32,6 +33,19 @@ airport_codes_names = {
     "ZRH": "Zurich",
     "BSL": "Basel",
     "GLA": "Glasgow",
+    "DUB": "Dublin",
+}
+
+ignore_carrier_codes = [
+  "LY","EK","QR","GF","EY","SV","FZ","WY","9P","RJ","KU","30","E5","G9","NE","NA","NG","SU","SW","RY","CA","CF","CI","CK","CN","CZ","G5","KN","MU","PN","WH","ZY","KQ","L6","L8"
+]
+
+status_codes = {
+    "FE": "Early",
+    "NI": "",
+    "OT": "On Time",
+    "DL": "Delayed",
+    "NO": "",
 }
 
 carrier_codes = {
@@ -3297,11 +3311,3 @@ carrier_codes = {
 "ZY":{
 "Name": "China Air Cargo"
 }}
-
-status_codes = {
-    "FE": "Early",
-    "NI": "",
-    "OT": "On Time",
-    "DL": "Delayed",
-    "NO": "",
-}
