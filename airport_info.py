@@ -35,7 +35,6 @@ button3 = Button(20)
 button4 = Button(16)
 
 # reuse token for more than one call at a time
-# add check to filter out certain airlines i don't care for
 # try to figure out why it's refreshing the screen 3-4 times each cycle
 
 
@@ -79,8 +78,13 @@ codesArr = [
 ]
 
 
+random_code = ""
+depart_airport_tz = ""
+depart_airport_name = ""
+random_flight = {}
+local_time = dt.datetime.now()
 token = ""
-token_expire_time = ""
+token_expire_time = dt.datetime.now()
 headers = {}
 last_airport_code = ""
 textNImg = PapirusComposite(False)
@@ -104,24 +108,27 @@ def getToken():
   """
     global token
     global headers
-    try:
-      token_request = requests.post(token_url, data=token_auth)
-      if token_request.status_code == requests.codes.ok:
-          token = token_request.json()["access_token"]
-          headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
-    except:
-      # show error, wait, return
-      
-      textNImg.UpdateText("Start", "Token error.")
-      textNImg.WriteAll()
-      return
+    # set time to check as 1min before token should expire
+    temp_expire_time = token_expire_time - dt.timedelta(minutes=1)
+    # if the current time is not before the expiration time, get a new token
+    # otherwise, just keep using the current token
+    # since the expiration time initializes as the current time it should always
+    # force a token on the first try
+    if dt.datetime.now() > temp_expire_time:
+      try:
+        token_request = requests.post(token_url, data=token_auth)
+        if token_request.status_code == requests.codes.ok:
+            token_data = token_request.json()
+            token = token_data["access_token"]
+            token_expire_time = dt.datetime.now() + dt.timedelta(token_data["expires_in"])
 
-
-random_code = ""
-depart_airport_tz = ""
-depart_airport_name = ""
-random_flight = {}
-local_time = dt.datetime.now()
+            headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
+      except:
+        # show error, wait, return
+        
+        textNImg.UpdateText("Start", "Token error.")
+        textNImg.WriteAll()
+        return
 
 def generateRandomAirportCode():
     global random_code
@@ -161,21 +168,34 @@ def getRandomAirport():
     flights_request = requests.get(
         flights_url + random_code + "/" + now_str, headers=headers, params=params
     )
+    # api call successful
     if flights_request.status_code == requests.codes.ok:
         flights_data = flights_request.json()
+        # sometimes the api returns an array, sometimes a single item
         if type(flights_data["FlightStatusResource"]["Flights"]["Flight"]) is list:
+            # get the array of flights
             flights_array = flights_data["FlightStatusResource"]["Flights"]["Flight"]
             random_flight_found = False
+            # loop for checking through flights for airlines i want to ignore
             while random_flight_found is False:
+              # each loop removes an item from the array so first check that the array has anything
               if len(flights_array) != 0:
+                  # choose a random item from the array
                   random_index = randrange(flights_array.__len__())
                   temp_flight = flights_array[random_index]
+                  # verify that flight isn't in the list of airlines to ignore
                   if temp_flight["MarketingCarrier"]["AirlineID"] not in codes.ignore_carrier_codes:
+                      # use the flight
                       random_flight = temp_flight
+                      # cancel out of loop
                       random_flight_found = True
                   else:
+                      # if it's in the list, remove it from the array
                       flights_array.pop(random_index)
               else:
+                  # not sure, but this could lead to a infinite loop so adding this to try to avoid that
+                  random_flight_found = True
+                  # nothing left in array so look for another flight
                   getRandomAirport()
 
         else:
