@@ -120,15 +120,19 @@ def getToken():
         if token_request.status_code == requests.codes.ok:
             token_data = token_request.json()
             token = token_data["access_token"]
+            textNImg.UpdateText("Start", "Token expires in: " + token_data["expires_in"])
+            textNImg.WriteAll()
             token_expire_time = dt.datetime.now() + dt.timedelta(seconds=int(token_data["expires_in"]))
 
             headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
+            textNImg.UpdateText("Start", "Token expires at: " + token_expire_time)
+            textNImg.WriteAll()
       except:
         # show error, wait, return
         
         textNImg.UpdateText("Start", "Token error.")
         textNImg.WriteAll()
-        return
+    return
 
 def generateRandomAirportCode():
     global random_code
