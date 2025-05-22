@@ -120,7 +120,7 @@ def getToken():
         if token_request.status_code == requests.codes.ok:
             token_data = token_request.json()
             token = token_data["access_token"]
-            token_expire_time = dt.datetime.now() + dt.timedelta(token_data["expires_in"])
+            token_expire_time = dt.datetime.now() + dt.timedelta(seconds=int(token_data["expires_in"]))
 
             headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
       except:
