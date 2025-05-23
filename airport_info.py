@@ -116,16 +116,8 @@ def getToken():
     # set time to check as 1min before token should expire
     textNImg.UpdateText("Start", "Checking token ")
     textNImg.WriteAll()
-    
-    # textNImg.UpdateText("Start", str(token_expire_time))
-    # textNImg.WriteAll()
+
     temp_expire_time = token_expire_time - 60
-    # textNImg.UpdateText("Start", str(temp_expire_time))
-    # textNImg.WriteAll()
-    # textNImg.UpdateText("Start", str(dt.datetime.now().timestamp()))
-    # textNImg.WriteAll()
-    textNImg.UpdateText("Start", str(dt.datetime.now().timestamp() > temp_expire_time))
-    textNImg.WriteAll()
     # if the current time is not before the expiration time, get a new token
     # otherwise, just keep using the current token
     # since the expiration time initializes as the current time it should always
@@ -138,23 +130,14 @@ def getToken():
         if token_request.status_code == requests.codes.ok:
             token_data = token_request.json()
             token = token_data["access_token"]
-            textNImg.UpdateText("Start", "Token expires in: " + str(token_data["expires_in"]))
-            textNImg.WriteAll()
             token_expire_time = dt.datetime.now().timestamp() + token_data["expires_in"]
-
             headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
-            textNImg.UpdateText("Start", "Token expires at: " + token_expire_time)
-            textNImg.WriteAll()
       except:
         # show error, wait, return
-        
         textNImg.UpdateText("Start", "Token error.")
         textNImg.WriteAll()
         getToken()
 
-    else:
-        textNImg.UpdateText("Start", "Not Fetching token")
-        textNImg.WriteAll()
     return
 
 def generateRandomAirportCode():
