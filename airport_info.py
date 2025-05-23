@@ -140,7 +140,7 @@ def getToken():
             token = token_data["access_token"]
             textNImg.UpdateText("Start", "Token expires in: " + str(token_data["expires_in"]))
             textNImg.WriteAll()
-            token_expire_time = dt.datetime.now() + dt.timedelta(seconds=int(token_data["expires_in"])).timestamp()
+            token_expire_time = dt.datetime.now().timestamp() + token_data["expires_in"]
 
             headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
             textNImg.UpdateText("Start", "Token expires at: " + token_expire_time)
@@ -151,7 +151,7 @@ def getToken():
         textNImg.UpdateText("Start", "Token error.")
         textNImg.WriteAll()
         getToken()
-        return
+
     else:
         textNImg.UpdateText("Start", "Not Fetching token")
         textNImg.WriteAll()
