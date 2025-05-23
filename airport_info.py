@@ -117,20 +117,20 @@ def getToken():
     textNImg.UpdateText("Start", "Checking token ")
     textNImg.WriteAll()
     
-    textNImg.UpdateText("Start", str(token_expire_time))
-    textNImg.WriteAll()
+    # textNImg.UpdateText("Start", str(token_expire_time))
+    # textNImg.WriteAll()
     temp_expire_time = token_expire_time - 60
-    textNImg.UpdateText("Start", str(temp_expire_time))
-    textNImg.WriteAll()
-    textNImg.UpdateText("Start", str(dt.datetime.now().timestamp()))
-    textNImg.WriteAll()
+    # textNImg.UpdateText("Start", str(temp_expire_time))
+    # textNImg.WriteAll()
+    # textNImg.UpdateText("Start", str(dt.datetime.now().timestamp()))
+    # textNImg.WriteAll()
     textNImg.UpdateText("Start", str(dt.datetime.now().timestamp() > temp_expire_time))
     textNImg.WriteAll()
     # if the current time is not before the expiration time, get a new token
     # otherwise, just keep using the current token
     # since the expiration time initializes as the current time it should always
     # force a token on the first try
-    if dt.datetime.now() > temp_expire_time or token == "":
+    if dt.datetime.now().timestamp() > temp_expire_time or token == "":
       textNImg.UpdateText("Start", "Fetching token")
       textNImg.WriteAll()
       try:
@@ -140,7 +140,7 @@ def getToken():
             token = token_data["access_token"]
             textNImg.UpdateText("Start", "Token expires in: " + str(token_data["expires_in"]))
             textNImg.WriteAll()
-            token_expire_time = dt.datetime.now() + dt.timedelta(seconds=int(token_data["expires_in"]))
+            token_expire_time = dt.datetime.now() + dt.timedelta(seconds=int(token_data["expires_in"])).timestamp()
 
             headers = {"Accept": "application/json", "Authorization": "Bearer " + token}
             textNImg.UpdateText("Start", "Token expires at: " + token_expire_time)
@@ -152,6 +152,9 @@ def getToken():
         textNImg.WriteAll()
         getToken()
         return
+    else:
+        textNImg.UpdateText("Start", "Not Fetching token")
+        textNImg.WriteAll()
     return
 
 def generateRandomAirportCode():
