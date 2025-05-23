@@ -122,9 +122,9 @@ def getToken():
     temp_expire_time = token_expire_time - 60
     textNImg.UpdateText("Start", str(temp_expire_time))
     textNImg.WriteAll()
-    textNImg.UpdateText("Start", int(dt.datetime.now().timestamp()))
+    textNImg.UpdateText("Start", str(dt.datetime.now().timestamp()))
     textNImg.WriteAll()
-    textNImg.UpdateText("Start", int(dt.datetime.now().timestamp()) > temp_expire_time)
+    textNImg.UpdateText("Start", str(dt.datetime.now().timestamp() > temp_expire_time))
     textNImg.WriteAll()
     # if the current time is not before the expiration time, get a new token
     # otherwise, just keep using the current token
