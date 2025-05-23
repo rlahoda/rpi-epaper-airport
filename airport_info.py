@@ -118,7 +118,7 @@ def getToken():
     
     textNImg.UpdateText("Start", str(token_expire_time))
     textNImg.WriteAll()
-    textNImg.UpdateText("Start", token_expire_time.timestamp())
+    textNImg.UpdateText("Start", token_expire_time.timestamp)
     textNImg.WriteAll()
     temp_expire_time = token_expire_time - 60
     textNImg.UpdateText("Start", temp_expire_time)
