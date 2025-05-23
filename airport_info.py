@@ -84,13 +84,14 @@ depart_airport_name = ""
 random_flight = {}
 local_time = dt.datetime.now()
 token = ""
-token_expire_time = dt.datetime.now()
+token_expire_time = dt.datetime.now().timestamp()
 headers = {}
 last_airport_code = ""
 textNImg = PapirusComposite(False)
 # textNImg = PapirusComposite(False, rotation=180) # This flips the readout 180 degrees
 # textNImg = PapirusComposite() # This puts up info without needing the .WriteAll() function
 textNImg.AddText("Initializing", Id="Start")
+textNImg.WriteAll()
 
 textNImg.AddImg(
     "/home/pi/rpi-epaper-airport/display-background2.png",
@@ -113,8 +114,8 @@ def getToken():
     textNImg.UpdateText("Start", "Checking token ")
     textNImg.WriteAll()
     
-    temp_expire_time = token_expire_time - dt.timedelta(minutes=1)
-    textNImg.UpdateText("Start", dt.datetime.now() > temp_expire_time)
+    temp_expire_time = token_expire_time - 60
+    textNImg.UpdateText("Start", dt.datetime.now().timestamp() > temp_expire_time)
     textNImg.WriteAll()
     # if the current time is not before the expiration time, get a new token
     # otherwise, just keep using the current token
@@ -128,7 +129,7 @@ def getToken():
         if token_request.status_code == requests.codes.ok:
             token_data = token_request.json()
             token = token_data["access_token"]
-            textNImg.UpdateText("Start", "Token expires in: " + token_data["expires_in"])
+            textNImg.UpdateText("Start", "Token expires in: " + str(token_data["expires_in"]))
             textNImg.WriteAll()
             token_expire_time = dt.datetime.now() + dt.timedelta(seconds=int(token_data["expires_in"]))
 
