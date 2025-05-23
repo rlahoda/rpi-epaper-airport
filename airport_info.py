@@ -85,6 +85,7 @@ random_flight = {}
 local_time = dt.datetime.now()
 token = ""
 token_expire_time = dt.datetime.now()
+token_expire_time = token_expire_time.timestamp()
 
 # token_expire_time = int(dt.datetime.now().timestamp())
 headers = {}
@@ -118,10 +119,8 @@ def getToken():
     
     textNImg.UpdateText("Start", str(token_expire_time))
     textNImg.WriteAll()
-    textNImg.UpdateText("Start", str(token_expire_time.timestamp()))
-    textNImg.WriteAll()
     temp_expire_time = token_expire_time - 60
-    textNImg.UpdateText("Start", temp_expire_time)
+    textNImg.UpdateText("Start", str(temp_expire_time))
     textNImg.WriteAll()
     textNImg.UpdateText("Start", int(dt.datetime.now().timestamp()))
     textNImg.WriteAll()
