@@ -124,8 +124,6 @@ def getToken():
     # since the expiration time initializes as the current time it should always
     # force a token on the first try
     if dt.datetime.now().timestamp() > temp_expire_time or token == "":
-      textNImg.UpdateText("Start", "Fetching token")
-      textNImg.WriteAll()
       try:
         token_request = requests.post(token_url, data=token_auth)
         if token_request.status_code == requests.codes.ok:
@@ -277,7 +275,7 @@ def displayFlightInfo():
     flight_length = flight_length_hours + ":" + flight_length_arr[1]
 
     local_time_str = local_time.strftime("%H:%M")
-    # textNImg.Clear()
+    textNImg.Clear()
 
     
     # textNImg.WriteAll()
