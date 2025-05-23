@@ -116,7 +116,7 @@ def getToken():
     textNImg.UpdateText("Start", "Checking token ")
     textNImg.WriteAll()
     
-    textNImg.UpdateText("Start", token_expire_time)
+    textNImg.UpdateText("Start", str(token_expire_time))
     textNImg.WriteAll()
     textNImg.UpdateText("Start", token_expire_time.timestamp())
     textNImg.WriteAll()
