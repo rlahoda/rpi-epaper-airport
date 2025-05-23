@@ -84,7 +84,7 @@ depart_airport_name = ""
 random_flight = {}
 local_time = dt.datetime.now()
 token = ""
-token_expire_time = dt.datetime.now().timestamp()
+token_expire_time = int(dt.datetime.now().timestamp())
 headers = {}
 last_airport_code = ""
 textNImg = PapirusComposite(False)
@@ -115,7 +115,11 @@ def getToken():
     textNImg.WriteAll()
     
     temp_expire_time = token_expire_time - 60
-    textNImg.UpdateText("Start", dt.datetime.now().timestamp() > temp_expire_time)
+    textNImg.UpdateText("Start", temp_expire_time)
+    textNImg.WriteAll()
+    textNImg.UpdateText("Start", int(dt.datetime.now().timestamp()))
+    textNImg.WriteAll()
+    textNImg.UpdateText("Start", int(dt.datetime.now().timestamp()) > temp_expire_time)
     textNImg.WriteAll()
     # if the current time is not before the expiration time, get a new token
     # otherwise, just keep using the current token
