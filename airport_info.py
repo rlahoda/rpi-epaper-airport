@@ -111,6 +111,7 @@ def getToken():
   Fetches an auth token from the api
   """
     global token
+    global token_expire_time
     global headers
     # set time to check as 1min before token should expire
     textNImg.UpdateText("Start", "Checking token ")
