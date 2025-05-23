@@ -114,7 +114,7 @@ def getToken():
     textNImg.WriteAll()
     
     temp_expire_time = token_expire_time - dt.timedelta(minutes=1)
-    textNImg.UpdateText("Start", "Temp expire time: " + str(temp_expire_time))
+    textNImg.UpdateText("Start", dt.datetime.now() > temp_expire_time)
     textNImg.WriteAll()
     # if the current time is not before the expiration time, get a new token
     # otherwise, just keep using the current token
@@ -140,7 +140,7 @@ def getToken():
         
         textNImg.UpdateText("Start", "Token error.")
         textNImg.WriteAll()
-    return
+        return
 
 def generateRandomAirportCode():
     global random_code
