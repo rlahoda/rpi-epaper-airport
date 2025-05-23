@@ -140,7 +140,9 @@ def getToken():
         
         textNImg.UpdateText("Start", "Token error.")
         textNImg.WriteAll()
+        getToken()
         return
+    return
 
 def generateRandomAirportCode():
     global random_code
