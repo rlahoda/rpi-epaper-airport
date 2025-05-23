@@ -100,7 +100,7 @@ textNImg.AddImg(
     (200, 96),
     Id="background",
 )
-textNImg.WriteAll()
+# textNImg.WriteAll()
 
 
 def getToken():
@@ -114,6 +114,8 @@ def getToken():
     textNImg.UpdateText("Start", "Checking token ")
     textNImg.WriteAll()
     
+    textNImg.UpdateText("Start", token_expire_time)
+    textNImg.WriteAll()
     temp_expire_time = token_expire_time - 60
     textNImg.UpdateText("Start", temp_expire_time)
     textNImg.WriteAll()
