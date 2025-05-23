@@ -90,12 +90,7 @@ last_airport_code = ""
 textNImg = PapirusComposite(False)
 # textNImg = PapirusComposite(False, rotation=180) # This flips the readout 180 degrees
 # textNImg = PapirusComposite() # This puts up info without needing the .WriteAll() function
-textNImg.AddText("Initializing", Id="Start")
-textNImg.WriteAll()
-textNImg.UpdateText("Start", str(local_time))
-textNImg.WriteAll()
-textNImg.UpdateText("Start", str(token_expire_time))
-textNImg.WriteAll()
+
 
 textNImg.AddImg(
     "/home/pi/rpi-epaper-airport/display-background2.png",
@@ -119,7 +114,7 @@ def getToken():
     textNImg.UpdateText("Start", str(token_expire_time))
     textNImg.WriteAll()
     temp_expire_time = token_expire_time - dt.timedelta(minutes=1)
-    textNImg.UpdateText("Start", "Temp expire time: " + temp_expire_time)
+    textNImg.UpdateText("Start", "Temp expire time: " + str(temp_expire_time))
     textNImg.WriteAll()
     # if the current time is not before the expiration time, get a new token
     # otherwise, just keep using the current token
