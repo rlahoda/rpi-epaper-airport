@@ -92,6 +92,10 @@ textNImg = PapirusComposite(False)
 # textNImg = PapirusComposite() # This puts up info without needing the .WriteAll() function
 textNImg.AddText("Initializing", Id="Start")
 textNImg.WriteAll()
+textNImg.UpdateText("Start", local_time)
+textNImg.WriteAll()
+textNImg.UpdateText("Start", str(token_expire_time))
+textNImg.WriteAll()
 
 textNImg.AddImg(
     "/home/pi/rpi-epaper-airport/display-background2.png",
