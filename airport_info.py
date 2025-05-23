@@ -112,8 +112,7 @@ def getToken():
     # set time to check as 1min before token should expire
     textNImg.UpdateText("Start", "Checking token ")
     textNImg.WriteAll()
-    textNImg.UpdateText("Start", str(token_expire_time))
-    textNImg.WriteAll()
+    
     temp_expire_time = token_expire_time - dt.timedelta(minutes=1)
     textNImg.UpdateText("Start", "Temp expire time: " + str(temp_expire_time))
     textNImg.WriteAll()
@@ -121,7 +120,9 @@ def getToken():
     # otherwise, just keep using the current token
     # since the expiration time initializes as the current time it should always
     # force a token on the first try
-    if dt.datetime.now() > temp_expire_time:
+    if dt.datetime.now() > temp_expire_time or token == "":
+      textNImg.UpdateText("Start", "Fetching token")
+      textNImg.WriteAll()
       try:
         token_request = requests.post(token_url, data=token_auth)
         if token_request.status_code == requests.codes.ok:
