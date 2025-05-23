@@ -90,7 +90,7 @@ last_airport_code = ""
 textNImg = PapirusComposite(False)
 # textNImg = PapirusComposite(False, rotation=180) # This flips the readout 180 degrees
 # textNImg = PapirusComposite() # This puts up info without needing the .WriteAll() function
-
+textNImg.AddText("Initializing", Id="Start")
 
 textNImg.AddImg(
     "/home/pi/rpi-epaper-airport/display-background2.png",
@@ -99,6 +99,7 @@ textNImg.AddImg(
     (200, 96),
     Id="background",
 )
+textNImg.WriteAll()
 
 
 def getToken():
