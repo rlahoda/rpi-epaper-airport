@@ -115,9 +115,6 @@ def getToken():
     global headers
     # textNImg.Clear()
     # set time to check as 1min before token should expire
-    textNImg.UpdateText("Start", "Checking token ")
-    textNImg.WriteAll()
-
     temp_expire_time = token_expire_time - 60
     # if the current time is not before the expiration time, get a new token
     # otherwise, just keep using the current token
@@ -241,8 +238,6 @@ def displayFlightInfo():
         else:
             dest_airport_name = dest_airport_data["AirportResource"]["Airports"]["Airport"]["Names"]["Name"]["$"]
     else:
-        textNImg.UpdateText("Start", "Destination airport error")
-        textNImg.WriteAll()
         return
     flight_num = random_flight["OperatingCarrier"]["FlightNumber"]
 
